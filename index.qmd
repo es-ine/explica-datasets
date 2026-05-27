@@ -1,0 +1,24 @@
+---
+title: "Listado de datasets"
+lang: es
+listing:
+  filter-ui: true
+  sort-ui: [title, tema, observaciones]
+  sort: [title]
+  page-size: 50
+  categories: true
+  field-display-names:
+    tecnica: "Técnica estadística"
+    notebook: Notebook
+    operation: Operación
+    tema: Tema
+    observaciones: "Número de observaciones"
+    title: Título
+    categories: Categorías
+    
+  template: lista.ejs
+  contents:
+    - lista.yml
+---
+
+Un dataset es un tabla de datos plana con observaciones por filas y variables por columnas. Los datasets son recursos educativos para universitarios muy útiles para practicar técnicas multivariantes o de series temporales. Así por ejemplo, sin necesidad de acudir a los microdatos, se pueden obtener datasets muy interesantes cruzando estadísticas de población, empleo y contabilidad nacional por Comunidades Autónomas.

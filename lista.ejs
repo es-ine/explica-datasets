@@ -1,0 +1,40 @@
+```{=html}
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+  <div class="list quarto-listing-default">
+    <% for (const item of items) { %>
+      <div class="quarto-post" <%= metadataAttrs(item) %>>
+        <div class="body">
+          <h3 class="no-anchor listing-title"><%= item.title %></h3>
+          <div class="listing-description"><%= item.description %></div>
+          <span class="listing-tecnica"><b>Técnica estadística:</b> <%= item['tecnica'] %></span><br/>
+          <span class="listing-tema"><b>Temas:</b> <%= item['tema'] %></span><br/>
+          <span class="listing-operation"><b>Operaciones:</b>
+          <% for (let i=0; i < item['operation'].length; i++ ) { %>
+            <% if(item['hoperation'][i] == 'blank') { %>
+              <%- item['operation'][i] %>
+            <% } else {%>
+              <a href="<%- item['hoperation'][i] %>" ><%- item['operation'][i] %></a>
+            <% } %>
+            <% if(i < (item['operation'].length -1)) { %>,<% } %>
+          <% } %>
+          </span><br/>
+          <span class="listing-observaciones"><b>Número de observaciones:</b> <%= item['observaciones'] %></span><br/><br/>
+          <div class="listing-categories">
+            <div class="listing-category" >
+              <a href="<%- item.href %>" >Fichero</a>
+            </div>
+            <div class="listing-category" >
+              <a href="<%- item['notebook'] %>" >Notebook</a>
+            </div>
+            <% if(item['cleaning']) { %>
+              <div class="listing-category" >
+                <a href="<%- item['cleaning'] %>" >Preprocesado de datos</a>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+```

@@ -1,0 +1,381 @@
+---
+title: 'Series Temporales - ARIMA: ipc_series'
+lang: es
+---
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center", warning = FALSE, message = FALSE)
+
+
+# fig.align= 'center para que nos centre todas figuras que se muestran
+# warning = FALSE para que no muestre mensajes de warning
+# message = FALSE para que no muestre mensajes automáticos cuando carga paquetes y demás en el output
+```
+
+# Introducción
+
+A continuación se va a explicar como modelizar una serie temporal con un ARIMA y todas las consideraciones que se deben tener en cuenta. Se llevará a cabo un ejemplo práctico a partir de un conjunto de datos, mostrando como interpretar los resultados que se van obteniendo.
+
+## dataset
+
+En este cuaderno vamos a analizar el dataset llamado [*ipc_series.xlsx*](../../../../files/ipc_series.xlsx). Este dataset presenta el [IPC Español](https://www.ine.es/ipc/) desde el año 2002 hasta el 2022 con una periodicidad mensual. El objetivo será analizar dicha serie temporal mediante un modelo ARIMA.
+
+Concretamente en este dataset tenemos las siguientes variables:
+
+-   **IPC**: Índice de Precios al consumo.
+-   **fecha**: Fecha correspondiente.
+
+## Descripción del trabajo a realizar
+
+Se pretende ajustar una serie temporal que contiene el IPC de España mediante un modelo ARIMA.
+
+-   Explorar patrones en la serie temporal.
+-   Ver que la serie sea estacionaria.
+-   Aplicar diferenciación si es necesario para estacionarizar la serie.
+-   Identificar modelos ARIMA/SARIMA utilizando información de la exploración y funciones ACF y PACF.
+-   Ajustar varios modelos ARIMA/SARIMA y seleccionar el mejor según métricas de ajuste.
+-   Evaluar la significancia estadística de los coeficientes del modelo ARIMA.
+-   Interpretar los coeficientes para comprender su influencia en la serie temporal.
+
+# Análisis Exploratorio (EDA)
+
+EDA viene del Inglés *Exploratory Data Analysis* y son los pasos relativos en los que se exploran las variables para tener una idea de que forma toma el dataset.
+
+## Librerías
+
+En este apartado se van a cargar todas las librerías necesarias para ejecutar el resto del código. Se recomienda instalarlas en caso de no disponer de ellas.
+
+```{r}
+#| label: librerias
+#| message: false
+#| warning: false
+# Librerías
+library(forecast) # para predecir observaciones futuras
+library(ggplot2) # Nice plots
+library(readxl) # Para leer excels
+library(stats) # Para crear objetos ts
+library(purrr) # Hacer combinaciones de listas
+library(tseries) # Para hacer el adf.test de estacionariedad
+```
+
+Cargamos entonces el conjunto de datos:
+
+```{r}
+#| label: cargar_datos
+data <- readxl::read_excel("../../../../files/ipc_series.xlsx", sheet = "Datos")
+
+data$ipc <- data$`Pobl. Total`
+```
+
+```{r}
+sum(is.na(data))
+```
+
+Por otra parte, para tener una noción general que nos permita describir el conjunto con el que vamos a trabajar, podemos extraer su dimensión, el tipo de variables que contiene o qué valores toma cada una.
+
+```{r}
+# Dimensión del conjunto de datos
+dim(data)
+
+# Tipo de variables que contiene
+str(data)
+```
+
+# ARIMA (AutoRegressive Integrated Moving Average)
+
+## Introducción
+
+El modelo ARIMA es uno de los modelos más comunes y poderosos para el análisis de series temporales. Se utiliza para modelar y predecir datos que exhiben comportamientos de tendencia y estacionalidad.
+
+-   **Componentes del modelo ARIMA:**
+    -   **AR (Auto-regresivo):** Representa la relación entre una observación actual y un número determinado de observaciones anteriores (retardos). **p** es el componente autoregresivo, que indica cuántas observaciones pasadas influyen en la observación actual. Para determinar el valor de p, se puede utilizar el gráfico de la función de autocorrelación parcial (PACF) de la serie diferenciada. Las barras que se salen significativamente del intervalo de confianza pueden indicar el orden de p que debería considerarse. Se recomienda ser conservador y elegir un número reducido de los valores más prominentes.
+
+    -   **I (Integrated):**. Representa el número de diferencias necesarias para hacer estacionaria la serie temporal. **d** es el número de diferenciaciones necesarias para hacer que la serie sea estacionaria. Esto se determina mediante pruebas estadísticas como el test de Dickey-Fuller aumentado (ADF test). Es importante tener cuidado de no sobrediferenciar la serie, lo que se puede observar en el gráfico de la función de autocorrelación (ACF) si los valores comienzan a ser negativos rápidamente.
+
+    -   **MA (Media Móvil):** Representa la relación entre una observación actual y un error de predicción residual de observaciones anteriores. **q** es el componente de media móvil, que indica cuántos términos de los residuos anteriores influyen en la observación actual. Para determinar el valor de q, se utiliza el gráfico de la función de autocorrelación (ACF) de la serie diferenciada. Los términos MA son esencialmente errores de pronóstico retrasados, y el ACF muestra cuántos términos MA se necesitan para eliminar la autocorrelación en la serie estacionaria. Se sugiere seleccionar tantos términos MA como los lags que estén significativamente por encima del intervalo de confianza.
+
+Si la serie está ligeramente por debajo del nivel de diferenciación adecuado (subdiferenciada), se pueden agregar uno o más términos de AR adicionales. Por otro lado, si la serie está sobrediferenciada, se puede considerar agregar términos MA adicionales para mejorar el modelo.
+
+Hasta ahora, hemos restringido nuestra atención a datos no estacionales y modelos ARIMA no estacionales. Sin embargo, los modelos **ARIMA** también son capaces de modelar una amplia gama de **datos estacionales**.
+
+Un modelo SARIMA estacional se forma incluyendo términos estacionales adicionales en los modelos ARIMA que hemos visto hasta ahora. Está escrito de la siguiente manera:
+
+# Seasonal ARIMA (AutoRegressive Integrated Moving Average)
+
+Un modelo ARIMA estacional se forma al incluir términos estacionales adicionales en los modelos ARIMA que hemos visto hasta ahora. Se escribe de la siguiente manera:
+
+```{r}
+#| eval: false
+ARIMA(p, d, q)(P, D, Q)(m)
+```
+
+donde `(p,d,q)` representa la parte no estacional del modelo, y `(P,D,Q)`la parte estacional. Además `m` sirve para indicar el número de observaciones que hay por año.
+
+# PASOS GENERALES
+
+1.  **Plotear la serie** Examina la serie en busca de características como tendencia y estacionalidad. Verifica si realmente existe un patrón estacional.
+
+2.  **Diferenciar** Vamos a calcular los valores de D,d (en ese orden)
+
+    -   Si se observa **componente estacional** en 1), tomar la diferencia estacional m, `ej: diff(tss,12)`, esto equivale a D=1, y plotear. En caso de que la serie aun tenga tendencia, diferenciar ahora la componente no estacional las veces que sea necesario.
+    -   Si **sólo hay componente no estacional**, diferenciar la serie las veces que sea necesario hasta remover la tendencia, y ese será el parámetro *d*.
+    -   Si no se observa ni componente estacional ni tendencia, no diferenciar.
+
+3.  **Examinar ACF/PACF de las series diferencias (si es necesario)** Para determinar los parámetros:
+
+    -   **Componente NO Estacional**: Examinar los primeros lags (1,2,3,..). El número de picos en el ACF (con lags bajos) fuera de las bandas horizontales con un PACF que se reduce gradualmente indican MA no estacionales, determinando q. Lo mismo en la ACF indica p.
+    -   **Componente Estacional**: Examinar los lags en múltiplos de m (Ej dato mensual 12,24,36,...). El número de picos en el ACF (con lags bajos) fuera de las bandas horizontales con un PACF que se reduce gradualmente indican MA no estacionales, determinando Q. Lo mismo en la ACF indica P.
+
+4.  **Generar todas las combinaciones posibles** de parámetros con los candidatos seleccionados en los pasos anteriores. Alimentar todas las combinaciones en el algoritmo SARIMA.
+
+5.  **Evaluar los resultados**, revisando los residuos para los modelos propuestos anteriormente, viendo los residuos, AIC, BIC,.... En caso de no obtener buenos resultados, estudiar otra parametrización para el ARIMA/SARIMA.
+
+Mientras que ARIMA se basa en los gráficos ACF y PACF, SARIMA adopta un enfoque de búsqueda de cuadrícula más sistemático dado el mayor número de parámetros potenciales. Luego, las búsquedas en la cuadrícula ajustan los parámetros minimizando AIC/BIC. La validación cruzada también ayuda a prevenir el sobreajuste.
+
+En general, SARIMA requiere un ajuste de parámetros más metódico, pero puede aprender patrones más ricos. La selección de pedidos de ARIMA es más rápida pero menos sólida para las series estacionales.
+
+Vamos a cargar los datos en un objeto adecuado para su análisis
+
+```{r}
+# Convertir el vector en una serie temporal
+# IPC
+tss <- stats::ts(rev(data$IPC), start = 2002, frequency = 12)
+```
+
+**Análisis Descriptivo:** Podemos realizar un análisis descriptivo básico para comprender mejor la serie temporal.
+
+```{r}
+summary(tss)
+# Población de ambos sexos
+plot(tss, main = "IPC Mensual desde 2002")
+legend("topleft", legend = c("IPC"), col = "black", lty = 1)
+```
+
+A primera vista ya se parece ver que la serie tiene una componente estacional puesto que hay picos de alta frecuencia dentro del año. Por otro lado la serie no es estacionaria ya que no la vemos centrada alrededor del 0, luego el primer paso será ajustar la componente estacional.
+
+## Modelo
+
+Sabiendo que los datos tienen frecuencia mensual y parece razonable pensar que la población puede tener la misma tendencia cada año en los mismos meses (por ej en verano crecer y en invierno decrecer), vamos a considerar diferenciar la serie 12 veces. Es decir, plantearemos un modelo **Seasonal ARIMA**. La dibujamos de nuevo a ver si es necesario diferenciar una vez más para eliminar la tendencia.
+
+```{r}
+# Serie diferenciada
+# dif 12 veces
+tt <- diff(tss, 12)
+plot(tt)
+```
+
+Necesitamos remover la tendencia luego diferenciamos de nuevo.
+
+```{r}
+# Serie diferenciada
+tt2 <- diff(tt, 1)
+plot(tt2)
+```
+
+```{r}
+# Las dibujamos
+par(mfrow = c(2, 1), mar = c(3, 3, 3, 2) + 0.1)
+plot(tt)
+plot(tt2)
+# TEST para ver estacionariedad
+# H0= NO es estacionaria
+# hace uso del paquete tseries
+adf.test(tt, alternative = "stationary")
+adf.test(tt2, alternative = "stationary")
+```
+
+Ya se ha ido la tendencia luego parece razonable pensar que la serie ya es estacionaria aunque la varianza aumente un poco al final, es decir, tomamos D=1, d=1. Examinemos ahora ACF/PACF para determinar los p,q y P,Q.
+
+```{r}
+# ACF plot
+Acf(tt2, main = "ACF para la serie diferenciada 2 vez", lag.max = 50, ylim = c(-1, 1))
+```
+
+-   **Primeros Lags (parámetros NO estacionales)**En el gráfico de ACF vemos que hay 1 o 2 barras que se salen notablemente del límite deseado (dentro del periodo m=12 meses), luego tomaríamos como q= 1, o 2.
+
+-   **Lags múltiplos de 12 (parámetros estacionales)** En el gráfico de ACF vemos que hay 1 barra que se sale notablemente del límite deseado (dentro de lags múltiplos m=12 meses), luego tomaríamos como Q= 1.
+
+```{r}
+# PACF plot
+Pacf(tt2, main = "PACF para la serie diferenciada 2 vez", lag.max = 50, ylim = c(-0.5, 0.5))
+```
+
+-   **Primeros Lags (parámetros NO estacionales)**En el gráfico de PACF vemos que hay 2 o 3 barras que se salen notablemente del límite deseado (dentro del periodo m=12 meses), luego tomaríamos como p= 2, o 3.
+
+-   **Lags múltiplos de 12 (parámetros estacionales)** En el gráfico de PACF vemos que hay 1 barra que se sale notablemente del límite deseado (dentro de lags múltiplos m=12 meses), luego tomaríamos como P= 1.
+
+```{r}
+# Modelo seleccionado
+arima_model_1 <- arima(tss, order = c(2, 1, 1), seasonal = c(1, 1, 1))
+```
+
+```{r}
+# Resumen
+summary(arima_model_1)
+
+
+# Diagnóstico del modelo
+checkresiduals(arima_model_1)
+
+
+
+# H0: no hay autocorrelación residual en los residuos del model
+# Queremos ver que se prueba H0
+Box.test(residuals(arima_model_1), type = "Ljung-Box")
+
+# Aceptamos H0 puesto que es >0.05
+```
+
+-   El **Ljung-Box test** tiene un p_val\>0.05 luego podemos aceptar H0 y asumir que los errores son independientes. Habría que ver para otros modelos. Esto hará que puede que el ajuste del todo no sea bueno.
+-   **Gráfico Residuos vs. Índice**: Este gráfico muestra los residuos en función del índice de las observaciones. Idealmente, los residuos deberían estar dispersos alrededor de cero sin ningún patrón discernible (parece que si lo están).
+-   **Gráfico Autocorrelación de Residuos**: muestra la autocorrelación de los residuos a diferentes rezagos. Se espera que los residuos no estén correlacionados entre sí, lo que se reflejaría en que los puntos estén dentro de las bandas de confianza. Sólo sobresale una línea luego no está del todo mal.
+-   **Histograma de Residuos**: Muestra la distribución de los residuos. Si los residuos se distribuyen normalmente alrededor de cero, el histograma debería parecerse a una distribución normal. (parece que si, aunque con ciertos valores que hacen las colas muy largas)
+
+# Plantear modelos
+
+Ahora vamos a hacer una grid con combinaciones de valores para los hiperparámetros para encontrar cuales nos proporcionan mejores métricas. Primero creamos la grid y luego evaluamos:
+
+(El siguiente chunk se deja como `eval=FALSE` puesto que le lleva un rato compilar.)
+
+```{r }
+# Combinaciones para parámetros ARIMA
+order_list <- list(
+  "p" = seq(2, 3),
+  "d" = 1,
+  "q" = seq(1, 3)
+) %>%
+  cross() %>%
+  map(lift(c))
+
+# Combinaciones para parámetros estacionales
+season_list <- list(
+  "P" = seq(1),
+  "D" =  1,
+  "Q" = seq(1, 2)
+) %>%
+  cross() %>%
+  map(lift(c))
+
+
+# Combinar los anteriores
+complete <- list(order_list, season_list) %>%
+  cross() %>%
+  map(lift(c))
+
+
+
+
+# Inicializamos el dataframe que guarda las métricas
+metrics_arima <- data.frame(p = integer(), d = integer(), q = integer(), P = integer(), D = integer(), Q = integer(), MAPE = numeric(), RMSE = numeric(), AIC = numeric())
+
+
+
+# Evaluamos todos los modelos con las combinaciones
+for (i in c(1:length(complete))) {
+  # Los que dan error los quitamos
+  arimaa <- arima(tss, order = complete[[i]][1:3], seasonal = complete[[i]][4:6])
+
+  MAPE <- mean(abs((tss - fitted(arimaa)) / tss)) * 100
+  RMSE <- sqrt(mean((tss - fitted(arimaa))^2))
+
+  metrics_arima[i, ] <- c(c(complete[[i]]), MAPE, RMSE, summary(arimaa)[["aic"]])
+}
+
+
+# Quitamos las observaciones que tienen valores nulos
+metrics_arima <- na.omit(metrics_arima)
+
+
+# Mostramos los resultados
+knitr::kable(metrics_arima)
+```
+
+Vemos que todos modelos tienen un AIC parecido luego nos quedamos con el que inicialmente habíamos propuesto. Cogemos el que mejor MAPE tiene, que es ARIMA(2,1,1)(1,1,1). Veamos que tal predice:
+
+```{r}
+# creamos train/test partición
+data.train <- window(tss, end = c(2022, 9))
+data.test <- window(tss, start = c(2022, 10))
+
+
+
+# Modelo
+# Cogemos esos parámetros porque los otros dan error
+
+
+arima_model_4 <- arima(data.train, order = c(2, 1, 1), seasonal = c(1, 1, 1))
+pred <- forecast(arima_model_4, h = 4)
+accuracy(pred, data.test)
+
+
+
+
+# Gráfico con los datos originales y las predicciones de los modelos
+plot(tss,
+  xlab = "Fecha", ylab = "Valor", main = "Comparación de Predicciones ARIMA"
+)
+points(pred$mean, col = "green", pch = 16, cex = 0.5) # Predicciones con arima_model1 en rojo
+lines(tss, col = "blue", lwd = 2) # Serie original en azul
+lines(fitted(arima_model_4), col = "red")
+
+legend("bottomright", legend = c("Original", "SARIMA ", "Predicciones"), col = c("blue", "red", "green"), lty = 1)
+
+lines(pred$lower[, 2], col = "green", lty = "solid")
+lines(pred$upper[, 2], col = "green", lty = "solid")
+```
+
+Veamos también los residuos:parece pasar los supuestos luego en teoría el modelo parece ser bueno. Sin embargo viendo las predicciones anteriores, distan un poco de los valores reales. Esto puede ser porque el comportamiento más reciente puede que no sea tan bueno de predecir.
+
+```{r}
+checkresiduals(arima_model_4)
+```
+
+## SARIMA automático
+
+Existe una función que permite identificar los parámetros de manera automática.
+
+```{r}
+# Identificar los parámetros del modelo SARIMA de manera automática
+automatic <- auto.arima(tss)
+summary(automatic)
+checkresiduals(automatic)
+```
+
+```{r}
+arima_model_4 <- arima(data.train, order = c(0, 1, 1), seasonal = c(1, 0, 0))
+pred <- forecast(arima_model_4, h = 4)
+accuracy(pred, data.test)
+
+
+
+
+# Gráfico con los datos originales y las predicciones de los modelos
+plot(tss,
+  xlab = "Fecha", ylab = "Valor", main = "Comparación de Predicciones ARIMA"
+)
+points(pred$mean, col = "green", pch = 16, cex = 0.5) # Predicciones con arima_model1 en rojo
+lines(tss, col = "blue", lwd = 2) # Serie original en azul
+lines(fitted(arima_model_4), col = "red")
+
+legend("bottomright", legend = c("Original", "SARIMA auto. ", "Predicciones"), col = c("blue", "red", "green"), lty = 1)
+
+lines(pred$lower[, 2], col = "green", lty = "solid")
+lines(pred$upper[, 2], col = "green", lty = "solid")
+```
+
+Vemos que el modelo propuesto por nosotros funciona algo mejor el modelo automático. Esto evidencia que como primer approach se puede usar la función `auto.arima()` obteniendo buenos resultados. No obstante es aconsejable estudiar el problema más a fondo para estudiar todas las posibles modelizaciones y tomar la que mejor se ajuste a nuestras expectativas.
+
+Las últimas observaciones no se predicen con tanta precisión porque puede que haya habido un cambio de comportamiento en la serie en estos últimos periodos.
+
+# Conclusión
+
+A lo largo de este notebook se ha expuesto las principales característica de una serie temporal y se ha explicado como modelarla mediante un modelo ARIMA, explicando además la ampliación de este tipo de modelos a los SARIMA (ARIMA estacional) y todas las consideraciones a tener en cuenta.
+
+# Bibliografía
+
+-   <https://online.stat.psu.edu/stat510/book/export/html/666>
+-   <https://otexts.com/fpp2/seasonal-arima.html>
+-   <https://rpubs.com/ryankelly/tsa5>
+-   <https://online.stat.psu.edu/stat510/lesson/4/4.1>
