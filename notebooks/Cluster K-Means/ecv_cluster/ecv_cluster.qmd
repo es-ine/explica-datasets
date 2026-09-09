@@ -1,5 +1,5 @@
 ---
-title: 'Cluster K-Means: ecv_cluster'
+title: 'Clúster K-Means: ecv_cluster'
 lang: es
 ---
 
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = "center", warning = FALSE, messag
 
 # Introducción
 
-En este notebook se expondrá como llevar a cabo un Análisis Cluster de tipo K-Means a partir de un conjunto de datos, explicando los fundamentos teóricos en el que se basa para agrupar los datos.
+En este notebook se expondrá como llevar a cabo un Análisis Clúster de tipo K-Means a partir de un conjunto de datos, explicando los fundamentos teóricos en el que se basa para agrupar los datos.
 
 ## dataset
 
@@ -28,17 +28,17 @@ En este cuaderno vamos a analizar el dataset llamado [*ecv_cluster.xlsx*](../../
 -   **tascar**: Tasa con carencia material severa.
 -   **tasvivtrab**: Tasa de hogares viviendo con baja intensidad en el trabajo (de 0 a 59 años).
 
-El objetivo de este estudio será aplicar un Análisis **Cluster** para hacer grupos de comunidades autónomas en función de las variables definidas arriba. Concretamente usaremos un cluster K-Means
+El objetivo de este estudio será aplicar un Análisis **Clúster** para hacer grupos de comunidades autónomas en función de las variables definidas arriba. Concretamente usaremos un clúster K-Means
 
 ## Descripción del trabajo a realizar
 
-Se pretende hacer un Análisis Cluster empleando el procedimiento Cluster K-Means de las **CCAA** en función a las variables **taspobex** y **tascar** .
+Se pretende hacer un Análisis Clúster empleando el procedimiento Clúster K-Means de las **CCAA** en función a las variables **taspobex** y **tascar** .
 
 -   Hacer un análisis exploratorio.Ver si hay NA's y si es necesario escalar los datos.
--   Variables sobre las que se buscan cluster (*taspobex*, *tascar*).
--   Estandarizar datos y probar cluster k-means con k=3.
+-   Variables sobre las que se buscan clúster (*taspobex*, *tascar*).
+-   Estandarizar datos y probar clúster k-means con k=3.
 -   Interpretar resultados.
--   Ver métodos Elbow y Silhouette si hay otro número óptimo de clusters y en ese caso repetir el estudio.
+-   Ver métodos Elbow y Silhouette si hay otro número óptimo de clústeres y en ese caso repetir el estudio.
 
 # Análisis Exploratorio (EDA)
 
@@ -119,7 +119,7 @@ La tasa de riesgo de pobreza o exclusión social (taspobex) no solo es generalme
 
 Esta comparación es crucial para entender cómo diferentes aspectos de la pobreza y la carencia material afectan a las Comunidades Autónomas y puede guiar políticas más específicas y efectivas para abordar estas cuestiones.
 
-# Clustering: Cluster K-means
+# Clustering: Clúster K-means
 
 ## Introducción
 
@@ -127,19 +127,19 @@ El **Análisis de clúster** es una técnica de aprendizaje no supervisado que a
 
 **Ejemplo ilustrativo**: Imaginar que tenemos un conjunto de datos de alumnos de un colegio de educación primaria y para cada uno de ellos disponemos de varias variables como edad, sexo, altura, promedio de notas.. Imaginar que queremos hacer grupos de estudiantes para aplicar programas de estudios. Intuitivamente asociaremos a cada edad un curso, y de manera adicional podemos decir que si tienen una media de notas muy alta se les podría asociar a un curso superior y si es muy baja a uno inferior. Es decir, a partir de determinadas reglas de decisión hemos conseguido clasificar las observaciones en diferentes grupos de datos.
 
-Concretamente, el **Cluster K-Means** define clusters de modo que se **minimice la variación total dentro del grupo** de acuerdo con el algoritmo Hartigan-Wong (Hartigan y Wong 1979), que define la variación total dentro del grupo como la suma de las distancias al cuadrado de las distancias euclidianas entre elementos y el centroide correspondiente. Se describe a continuación.
+Concretamente, el **Clúster K-Means** define clústeres de modo que se **minimice la variación total dentro del grupo** de acuerdo con el algoritmo Hartigan-Wong (Hartigan y Wong 1979), que define la variación total dentro del grupo como la suma de las distancias al cuadrado de las distancias euclidianas entre elementos y el centroide correspondiente. Se describe a continuación.
 
 Los pasos generales de este algoritmo son:
 
-1.  **Especificar** el número de clusters (**K**) que se se desean obtener.
+1.  **Especificar** el número de clústeres (**K**) que se se desean obtener.
 
 2.  **Seleccionar aleatoriamente k** objetos del conjunto de datos como centros del grupo (centroides). Asigna cada observación a su centroide más cercano, según la distancia entre el objeto y el centroide(es necesario elegir una función de distancia).
 
 3.  Para cada uno de los k grupos, **actualizar el centroide** del grupo calculando los nuevos valores medios de todos los puntos de datos del grupo. El **centroide de un grupo K-ésimo es** un vector de longitud p que contiene las medias de todas las variables para las observaciones en el grupo K-ésimo; p es el número de variables.
 
-4.  Calcular la distancia entre las observaciones y los nuevos centroides, asignado las observaciones al cluster del centroide más cercano.
+4.  Calcular la distancia entre las observaciones y los nuevos centroides, asignado las observaciones al clúster del centroide más cercano.
 
-5.  Repetir pasos 3-4 sucesivamente hasta que los centroides no cambien. En ese caso se supone que se ha alcanzado la convergencia y ya se han encontrado unos clusters estables. De forma predeterminada, el software R utiliza 10 como valor predeterminado para el número máximo de iteraciones, con el fin de evitar que entre en una secuencia infinita de iteraciones en el caso de no converger nunca.
+5.  Repetir pasos 3-4 sucesivamente hasta que los centroides no cambien. En ese caso se supone que se ha alcanzado la convergencia y ya se han encontrado unos clústeres estables. De forma predeterminada, el software R utiliza 10 como valor predeterminado para el número máximo de iteraciones, con el fin de evitar que entre en una secuencia infinita de iteraciones en el caso de no converger nunca.
 
 *Véase funciones de R stats::kmeans(x, centers, iter.max, nstart) que realizan los pasos 2-5 automáticamente.*
 
@@ -175,15 +175,15 @@ k1
 fviz_cluster(k1, data = resultado) # plot
 ```
 
-Podemos observar que la agrupación en 3 clusters que ha hecho el algoritmo K-MEANS es bastante similar a la que obtuvimos con el cluster jerárquico. Por un lado tenemos un cluster de los valores que se encuentran más a la derecha, luego otro con los que están más arriba y otros con los más cercanos al origen. En cierto modo:
+Podemos observar que la agrupación en 3 clústeres que ha hecho el algoritmo K-MEANS es bastante similar a la que obtuvimos con el clúster jerárquico. Por un lado tenemos un clúster de los valores que se encuentran más a la derecha, luego otro con los que están más arriba y otros con los más cercanos al origen. En cierto modo:
 
--   El **cluster verde** representa las CCAA que presentan una tasa de riesgo de pobreza y una tasa de personas con carencia material severa muy alta. Estas son Canarias, Ceuta y Melilla, lo cual cabría pensar que tiene sentido ya que ambas tres regiones contienen fuertes corrientes migratorias debido a que se encuentran en puntos fronterizos en el que hay mucha inmigración ilegal procedente de países como Marruecos.
+-   El **clúster verde** representa las CCAA que presentan una tasa de riesgo de pobreza y una tasa de personas con carencia material severa muy alta. Estas son Canarias, Ceuta y Melilla, lo cual cabría pensar que tiene sentido ya que ambas tres regiones contienen fuertes corrientes migratorias debido a que se encuentran en puntos fronterizos en el que hay mucha inmigración ilegal procedente de países como Marruecos.
 
--   En el **cluster azul** se encuentran las CCAA que presentan una tasa de riesgo de pobreza similares a las anteriores pero la de personas con carencia material alta no es tan grande como en las citadas anteriormente. Estas son Andalucía, Murica y Extremadura, que efectivamente es común que aparezcan en la prensa anualmente como regiones con más pobreza dentro de España (a excepción de Murica y Valencia) y sin embargo presentan una tasa de personas con carencia material no tan alta como las anteriores puesto que no hay tanta población en situación irregular que pueda derivar en una carencia material sustancial.
+-   En el **clúster azul** se encuentran las CCAA que presentan una tasa de riesgo de pobreza similares a las anteriores pero la de personas con carencia material alta no es tan grande como en las citadas anteriormente. Estas son Andalucía, Murica y Extremadura, que efectivamente es común que aparezcan en la prensa anualmente como regiones con más pobreza dentro de España (a excepción de Murica y Valencia) y sin embargo presentan una tasa de personas con carencia material no tan alta como las anteriores puesto que no hay tanta población en situación irregular que pueda derivar en una carencia material sustancial.
 
--   Por último, el **cluster rojo** presenta comunidades que tuvieron una incidencia parecida en la primera y segunda ola.
+-   Por último, el **clúster rojo** presenta comunidades que tuvieron una incidencia parecida en la primera y segunda ola.
 
-Notar que podemos mostrar los datos originales junto al cluster al que pertenecen.
+Notar que podemos mostrar los datos originales junto al clúster al que pertenecen.
 
 ```{r}
 # Mostrar Clusters
@@ -192,15 +192,15 @@ datos %>%
   select("CCAA", "taspobex", "tascar", "cluster")
 ```
 
-# Número Clusters Óptimo
+# Número Clústeres Óptimo
 
-Encontrar el número óptimo de clusters implica identificar la cantidad ideal de grupos en los que se pueden dividir los datos de manera significativa y coherente. Es crucial porque determina la calidad y utilidad de los resultados del análisis de agrupamiento.
+Encontrar el número óptimo de clústeres implica identificar la cantidad ideal de grupos en los que se pueden dividir los datos de manera significativa y coherente. Es crucial porque determina la calidad y utilidad de los resultados del análisis de agrupamiento.
 
 ## Método Elbow
 
-Una de las formas comunes de determinar este número es a través del método del **codo** o **elbow** en inglés. Este método busca identificar el punto donde la adición de más clusters ya no proporciona un beneficio significativo en la varianza explicada o la cohesión dentro de los grupos.
+Una de las formas comunes de determinar este número es a través del método del **codo** o **elbow** en inglés. Este método busca identificar el punto donde la adición de más clústeres ya no proporciona un beneficio significativo en la varianza explicada o la cohesión dentro de los grupos.
 
-Al representar la variación explicada en función del número de clusters, observamos un **gráfico** que se asemeja a la **forma** de un codo. A medida que aumentamos el número de clusters, la varianza explicada tiende a disminuir. El punto en el que esta disminución se estabiliza o se aplana marca el número óptimo de clusters, indicando un equilibrio entre una mayor partición (más clusters) y una adecuada interpretabilidad de los grupos.
+Al representar la variación explicada en función del número de clústeres, observamos un **gráfico** que se asemeja a la **forma** de un codo. A medida que aumentamos el número de clústeres, la varianza explicada tiende a disminuir. El punto en el que esta disminución se estabiliza o se aplana marca el número óptimo de clústeres, indicando un equilibrio entre una mayor partición (más clústeres) y una adecuada interpretabilidad de los grupos.
 
 ```{r}
 #  Método Elbow
@@ -216,11 +216,11 @@ El **método Silhouette** es una técnica utilizada para determinar la calidad d
 
 El proceso implica:
 
-1.  **Cálculo de la silueta individual**: Para cada punto de datos, se calcula la silueta, que es la diferencia entre la distancia media intra-cluster (distancia al resto de puntos en su mismo grupo) y la distancia media al cluster más cercano (distancia a los puntos del grupo más próximo, excluyendo el propio grupo).
+1.  **Cálculo de la silueta individual**: Para cada punto de datos, se calcula la silueta, que es la diferencia entre la distancia media intra-cluster (distancia al resto de puntos en su mismo grupo) y la distancia media al clúster más cercano (distancia a los puntos del grupo más próximo, excluyendo el propio grupo).
 
-2.  **Valor de la silueta global**: Se obtiene el promedio de las siluetas individuales de todos los puntos de datos en el conjunto. Contra más cercano a 1, mejor formado estará el cluster.
+2.  **Valor de la silueta global**: Se obtiene el promedio de las siluetas individuales de todos los puntos de datos en el conjunto. Contra más cercano a 1, mejor formado estará el clúster.
 
-La siguiente función generará un gráfico que muestra los valores de Silhouette en función del número de clusters. El número óptimo de clusters es típicamente aquel que maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
+La siguiente función generará un gráfico que muestra los valores de Silhouette en función del número de clústeres. El número óptimo de clústeres es típicamente aquel que maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
 
 ```{r}
 #  Método Silhouette
@@ -228,9 +228,9 @@ set.seed(785248)
 factoextra::fviz_nbclust(resultado, kmeans, method = "silhouette")
 ```
 
-Este método nos reafirma que el número óptimo es 2 puesto que es el caso cuyos clusters maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
+Este método nos reafirma que el número óptimo es 2 puesto que es el caso cuyos clústeres maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
 
-**NOTA**: Ahora podríamos repetir el estudio anterior con el número de clusters igual a 2 e intentar analizar de nuevo los resultados.
+**NOTA**: Ahora podríamos repetir el estudio anterior con el número de clústeres igual a 2 e intentar analizar de nuevo los resultados.
 
 ```{r}
 # K-MEANS algortihm
@@ -242,7 +242,7 @@ fviz_cluster(k1, data = resultado) # plot
 
 # Conclusión
 
-Aquí se han explicado los supuestos del cluster K-MEANS con un dataset en el que se han creado clusters de CCAA según tasa de riesgo de pobreza y la carencia material. La evidencia nos ha mostrado que se tiende agrupar las comunidades con incidencias más altas por un lado y más bajas por otro.
+Aquí se han explicado los supuestos del clúster K-MEANS con un dataset en el que se han creado clústeres de CCAA según tasa de riesgo de pobreza y la carencia material. La evidencia nos ha mostrado que se tiende agrupar las comunidades con incidencias más altas por un lado y más bajas por otro.
 
 # Bibliografía
 

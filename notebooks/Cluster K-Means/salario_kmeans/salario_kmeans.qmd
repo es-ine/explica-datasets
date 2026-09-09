@@ -1,5 +1,5 @@
 ---
-title: 'Cluster K-Means: salario_kmeans'
+title: 'Clúster K-Means: salario_kmeans'
 lang: es
 ---
 
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = "center", warning = FALSE, messag
 
 # Introducción
 
-En este notebook se expondrá como llevar a cabo un Análisis Cluster de tipo K-Means a partir de un conjunto de datos, explicando los fundamentos teóricos en el que se basa para agrupar los datos.
+En este notebook se expondrá como llevar a cabo un Análisis Clúster de tipo K-Means a partir de un conjunto de datos, explicando los fundamentos teóricos en el que se basa para agrupar los datos.
 
 ## dataset
 
@@ -26,11 +26,11 @@ En este cuaderno vamos a analizar el dataset llamado [*salario_kmeans.xlsx*](../
 -   **Poblacion**: Número de habitantes en la respectiva comunidad autónoma
 -   **Salario**: Salario medio anual.
 
-El objetivo de este estudio será aplicar un Análisis **Cluster** para hacer grupos de comunidades autónomas en función de las variables **Poblacion** y **Salario**. Concretamente usaremos la técnica K-Means.
+El objetivo de este estudio será aplicar un Análisis **Clúster** para hacer grupos de comunidades autónomas en función de las variables **Poblacion** y **Salario**. Concretamente usaremos la técnica K-Means.
 
 ## Descripción del trabajo a realizar
 
-En este notebook se expondrá como realizar un Análisis Cluster empleando la técnica K-Means en función de las variables **Poblacion** y **Salario** para agrupar las comunidades autónomas.
+En este notebook se expondrá como realizar un Análisis Clúster empleando la técnica K-Means en función de las variables **Poblacion** y **Salario** para agrupar las comunidades autónomas.
 
 -   Hacer un análisis exploratorio.Ver si hay NA's y si es necesario escalar los datos.
 -   Variables sobre las que se buscan clúster
@@ -177,18 +177,18 @@ k1
 fviz_cluster(k1, data = resultado) # plot
 ```
 
-Podemos observar que la agrupación en 4 clusters que ha hecho el algoritmo K-MEANS es bastante marcada y parece tener una interpretación directa. Se podría decir que las agrupaciones se dan a partir de salarios medios de las CCAA altos y bajos, y luego CCAA muy/poco pobladas. En cierto modo:
+Podemos observar que la agrupación en 4 clústeres que ha hecho el algoritmo K-MEANS es bastante marcada y parece tener una interpretación directa. Se podría decir que las agrupaciones se dan a partir de salarios medios de las CCAA altos y bajos, y luego CCAA muy/poco pobladas. En cierto modo:
 
--   **Cluster 1 (rojo)**:
+-   **Clúster 1 (rojo)**:
     -   **Comunidades**: Comunidad Valenciana y Andalucía.
     -   **Características**: Estas comunidades tienen una población relativamente alta y salarios medios moderados. Aunque tienen una alta población, tienen salarios moderados, lo que podría reflejar desafíos económicos específicos o una estructura económica diferente.
--   **Cluster 2 (verde)**:
+-   **Clúster 2 (verde)**:
     -   **Comunidades**: Navarra, País Vasco y Ceuta y Melilla.
     -   **Características**: Estas comunidades tienen salarios medios/altos y una población relativamente baja. Es decir, las comunidades con salarios más altos tienden a tener una población más baja, sugiriendo que pueden ser regiones más prósperas pero menos densamente pobladas.
--   **Cluster 3 (azul)**:
+-   **Clúster 3 (azul)**:
     -   **Comunidades**: Varias comunidades como Asturias, Aragón, Castilla y León, etc.
     -   **Características**: Estas comunidades tienen una población y salarios medios relativamente bajos. Son el grueso de comunidades.
--   **Cluster 4 (morado)**:
+-   **Clúster 4 (morado)**:
     -   **Comunidades**: Madrid y Cataluña.
     -   **Características**: Estas comunidades tienen una población muy alta y salarios medios altos. Indica que los grandes centros urbanos pueden tener mejores salarios debido a una economía más diversificada y oportunidades laborales
 

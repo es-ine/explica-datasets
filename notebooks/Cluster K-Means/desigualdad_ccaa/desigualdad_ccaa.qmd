@@ -1,5 +1,5 @@
 ---
-title: 'Cluster K-Means: desigualdad_CCAA'
+title: 'Clúster K-Means: desigualdad_CCAA'
 lang: es
 ---
 
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = "center", warning = FALSE, messag
 
 # Introducción
 
-En este notebook se expondrá como llevar a cabo un Análisis Cluster de tipo K-Means a partir de un conjunto de datos, explicando los fundamentos teóricos en el que se basa para agrupar los datos.
+En este notebook se expondrá como llevar a cabo un Análisis Clúster de tipo K-Means a partir de un conjunto de datos, explicando los fundamentos teóricos en el que se basa para agrupar los datos.
 
 ## dataset
 
@@ -26,17 +26,17 @@ En este cuaderno vamos a analizar el dataset llamado [*desigualdad_CCAA.xlsx*](.
 -   **Salmedmuj**: Salario medio anual (mujeres).
 -   **Salmedhom**: Salario medio anual (hombres).
 
-El objetivo de este estudio será aplicar un Análisis **Cluster** para hacer grupos de comunidades autónomas en función de las variables **Salmedmuj** y **Salmedhom**. Concretamente usaremos un cluster K Means.
+El objetivo de este estudio será aplicar un Análisis **Clúster** para hacer grupos de comunidades autónomas en función de las variables **Salmedmuj** y **Salmedhom**. Concretamente usaremos un clúster K Means.
 
 ## Descripción del trabajo a realizar
 
-En este notebook se expondrá como realizar un Análisis Cluster empleando el procedimiento Cluster Jerárquico de las **CCAA** en función a las variables **Salmedmuj** y **Salmedhom** para agrupar las comunidades por las diferencias de salarios entre sexos.
+En este notebook se expondrá como realizar un Análisis Clúster empleando el procedimiento Clúster Jerárquico de las **CCAA** en función a las variables **Salmedmuj** y **Salmedhom** para agrupar las comunidades por las diferencias de salarios entre sexos.
 
 -   Hacer un análisis exploratorio.Ver si hay NA's y si es necesario escalar los datos.
--   Variables sobre las que se buscan cluster (*Salmedmuj*, *Salmedhom*).
--   Estandarizar datos y probar cluster k-means con k=4.
+-   Variables sobre las que se buscan clúster (*Salmedmuj*, *Salmedhom*).
+-   Estandarizar datos y probar clúster k-means con k=4.
 -   Interpretar resultados.
--   Ver métodos Elbow y Silhouette si hay otro número óptimo de clusters y en ese caso repetir el estudio.
+-   Ver métodos Elbow y Silhouette si hay otro número óptimo de clústeres y en ese caso repetir el estudio.
 
 # Análisis Exploratorio (EDA)
 
@@ -118,27 +118,27 @@ grid.arrange(histogram, histogram2, boxplot, boxplot2, nrow = 2, ncol = 2, width
 
 Estos gráficos proporcionan una clara representación visual de las diferencias en la distribución de los salarios medios entre hombres y mujeres, lo que puede ser útil para análisis posteriores y toma de decisiones.
 
-# Clustering: Cluster K-means
+# Clustering: Clúster K-means
 
 ## Introducción
 
-El **Análisis Cluster** es una técnica de aprendizaje no supervisado que agrupa datos similares en conjuntos, llamados clústeres. El objetivo es dividir un conjunto de datos en grupos homogéneos, donde los miembros de cada grupo son más similares entre sí que con los miembros de otros grupos, según algún criterio de similitud predefinido.
+El **Análisis Clúster** es una técnica de aprendizaje no supervisado que agrupa datos similares en conjuntos, llamados clústeres. El objetivo es dividir un conjunto de datos en grupos homogéneos, donde los miembros de cada grupo son más similares entre sí que con los miembros de otros grupos, según algún criterio de similitud predefinido.
 
 **Ejemplo ilustrativo**: Imaginar que tenemos un conjunto de datos de alumnos de un colegio de educación primaria y para cada uno de ellos disponemos de varias variables como edad, sexo, altura, promedio de notas.. Imaginar que queremos hacer grupos de estudiantes para aplicar programas de estudios. Intuitivamente asociaremos a cada edad un curso, y de manera adicional podemos decir que si tienen una media de notas muy alta se les podría asociar a un curso superior y si es muy baja a uno inferior. Es decir, a partir de determinadas reglas de decisión hemos conseguido clasificar las observaciones en diferentes grupos de datos.
 
-Concretamente, el **Cluster K-Means** define clusters de modo que se **minimice la variación total dentro del grupo** de acuerdo con el algoritmo Hartigan-Wong (Hartigan y Wong 1979), que define la variación total dentro del grupo como la suma de las distancias al cuadrado de las distancias euclidianas entre elementos y el centroide correspondiente. Se describe a continuación.
+Concretamente, el **Clúster K-Means** define clústeres de modo que se **minimice la variación total dentro del grupo** de acuerdo con el algoritmo Hartigan-Wong (Hartigan y Wong 1979), que define la variación total dentro del grupo como la suma de las distancias al cuadrado de las distancias euclidianas entre elementos y el centroide correspondiente. Se describe a continuación.
 
 Los pasos generales de este algoritmo son:
 
-1.  **Especificar** el número de clusters (**K**) que se se desean obtener.
+1.  **Especificar** el número de clústeres (**K**) que se se desean obtener.
 
 2.  **Seleccionar aleatoriamente k** objetos del conjunto de datos como centros del grupo (centroides). Asigna cada observación a su centroide más cercano, según la distancia entre el objeto y el centroide(es necesario elegir una función de distancia).
 
 3.  Para cada uno de los k grupos, **actualizar el centroide** del grupo calculando los nuevos valores medios de todos los puntos de datos del grupo. El **centroide de un grupo K-ésimo es** un vector de longitud p que contiene las medias de todas las variables para las observaciones en el grupo K-ésimo; p es el número de variables.
 
-4.  Calcular la distancia entre las observaciones y los nuevos centroides, asignado las observaciones al cluster del centroide más cercano.
+4.  Calcular la distancia entre las observaciones y los nuevos centroides, asignado las observaciones al clúster del centroide más cercano.
 
-5.  Repetir pasos 3-4 sucesivamente hasta que los centroides no cambien. En ese caso se supone que se ha alcanzado la convergencia y ya se han encontrado unos clusters estables. De forma predeterminada, el software R utiliza 10 como valor predeterminado para el número máximo de iteraciones, con el fin de evitar que entre en una secuencia infinita de iteraciones en el caso de no converger nunca.
+5.  Repetir pasos 3-4 sucesivamente hasta que los centroides no cambien. En ese caso se supone que se ha alcanzado la convergencia y ya se han encontrado unos clústeres estables. De forma predeterminada, el software R utiliza 10 como valor predeterminado para el número máximo de iteraciones, con el fin de evitar que entre en una secuencia infinita de iteraciones en el caso de no converger nunca.
 
 *Véase funciones de R stats::kmeans(x, centers, iter.max, nstart) que realizan los pasos 2-5 automáticamente.*
 
@@ -172,23 +172,23 @@ k1
 fviz_cluster(k1, data = resultado) # plot
 ```
 
-Podemos observar que la agrupación en 4 clusters que ha hecho el algoritmo K-MEANS es bastante similar a la que obtuvimos con el cluster jerárquico. Por un lado tenemos un cluster de los valores que se encuentran más a la derecha, luego otro con los que están más arriba y otros con los más cercanos al origen. En cierto modo:
+Podemos observar que la agrupación en 4 clústeres que ha hecho el algoritmo K-MEANS es bastante similar a la que obtuvimos con el clúster jerárquico. Por un lado tenemos un clúster de los valores que se encuentran más a la derecha, luego otro con los que están más arriba y otros con los más cercanos al origen. En cierto modo:
 
--   Los **cluster rojo y morado** representa las CCAA donde el salario de hombres y mujeres es más alto de todo España.
+-   Los **clúster rojo y morado** representa las CCAA donde el salario de hombres y mujeres es más alto de todo España.
 
--   El **cluster azul** representa las CCAA donde los salarios de hombres y mujeres se encuentran en valores moderados, es decir, ni en los valores más altos del país ni en los más bajos.
+-   El **clúster azul** representa las CCAA donde los salarios de hombres y mujeres se encuentran en valores moderados, es decir, ni en los valores más altos del país ni en los más bajos.
 
--   Por último, el **cluster verde** presenta comunidades que presentar unos salarios mucho más bajos en comparación con el resto.
+-   Por último, el **clúster verde** presenta comunidades que presentar unos salarios mucho más bajos en comparación con el resto.
 
-# Número Clusters Óptimo
+# Número Clústeres Óptimo
 
-Encontrar el número óptimo de clusters implica identificar la cantidad ideal de grupos en los que se pueden dividir los datos de manera significativa y coherente. Es crucial porque determina la calidad y utilidad de los resultados del análisis de agrupamiento.
+Encontrar el número óptimo de clústeres implica identificar la cantidad ideal de grupos en los que se pueden dividir los datos de manera significativa y coherente. Es crucial porque determina la calidad y utilidad de los resultados del análisis de agrupamiento.
 
 ## Método Elbow
 
-Una de las formas comunes de determinar este número es a través del método del **codo** o **elbow** en inglés. Este método busca identificar el punto donde la adición de más clusters ya no proporciona un beneficio significativo en la varianza explicada (distancia promedio de los elementos al centroide del cluster) o la cohesión dentro de los grupos.
+Una de las formas comunes de determinar este número es a través del método del **codo** o **elbow** en inglés. Este método busca identificar el punto donde la adición de más clústeres ya no proporciona un beneficio significativo en la varianza explicada (distancia promedio de los elementos al centroide del clúster) o la cohesión dentro de los grupos.
 
-Al representar la variación explicada en función del número de clusters, observamos un **gráfico** que se asemeja a la **forma** de un codo. A medida que aumentamos el número de clusters, la varianza explicada tiende a disminuir. El punto en el que esta disminución se estabiliza o se aplana marca el número óptimo de clusters, indicando un equilibrio entre una mayor partición (más clusters) y una adecuada interpretabilidad de los grupos.
+Al representar la variación explicada en función del número de clústeres, observamos un **gráfico** que se asemeja a la **forma** de un codo. A medida que aumentamos el número de clústeres, la varianza explicada tiende a disminuir. El punto en el que esta disminución se estabiliza o se aplana marca el número óptimo de clústeres, indicando un equilibrio entre una mayor partición (más clústeres) y una adecuada interpretabilidad de los grupos.
 
 ```{r}
 #  Método Elbow
@@ -196,10 +196,10 @@ set.seed(785248)
 factoextra::fviz_nbclust(resultado, kmeans, method = "wss", print.summary = TRUE)
 ```
 
-Este gráfico ayuda a determinar el número óptimo de clusters para el algoritmo K-means. El método del codo (Elbow Method) consiste en observar el punto donde la reducción en la suma de los cuadrados dentro del cluster (WSS) empieza a disminuir de manera considerable.
+Este gráfico ayuda a determinar el número óptimo de clústeres para el algoritmo K-means. El método del codo (Elbow Method) consiste en observar el punto donde la reducción en la suma de los cuadrados dentro del clúster (WSS) empieza a disminuir de manera considerable.
 
--   El gráfico muestra un fuerte descenso en WSS hasta 2 clusters, luego se reduce más lentamente.
--   El "codo" más pronunciado parece estar en 2 clusters, pero dado que estamos utilizando 4 clusters en el primer gráfico, es razonable asumir que el análisis también considera la relevancia de esos clusters adicionales para capturar variaciones en los datos.
+-   El gráfico muestra un fuerte descenso en WSS hasta 2 clústeres, luego se reduce más lentamente.
+-   El "codo" más pronunciado parece estar en 2 clústeres, pero dado que estamos utilizando 4 clústeres en el primer gráfico, es razonable asumir que el análisis también considera la relevancia de esos clústeres adicionales para capturar variaciones en los datos.
 
 ## Método Silhouette
 
@@ -207,11 +207,11 @@ El **método Silhouette** es una técnica utilizada para determinar la calidad d
 
 El proceso implica:
 
-1.  **Cálculo de la silueta individual**: Para cada punto de datos, se calcula la silueta, que es la diferencia entre la distancia media intra-cluster (distancia al resto de puntos en su mismo grupo) y la distancia media al cluster más cercano (distancia a los puntos del grupo más próximo, excluyendo el propio grupo).
+1.  **Cálculo de la silueta individual**: Para cada punto de datos, se calcula la silueta, que es la diferencia entre la distancia media intra-cluster (distancia al resto de puntos en su mismo grupo) y la distancia media al clúster más cercano (distancia a los puntos del grupo más próximo, excluyendo el propio grupo).
 
-2.  **Valor de la silueta global**: Se obtiene el promedio de las siluetas individuales de todos los puntos de datos en el conjunto. Contra más cercano a 1, mejor formado estará el cluster.
+2.  **Valor de la silueta global**: Se obtiene el promedio de las siluetas individuales de todos los puntos de datos en el conjunto. Contra más cercano a 1, mejor formado estará el clúster.
 
-La siguiente función generará un gráfico que muestra los valores de Silhouette en función del número de clusters. El número óptimo de clusters es típicamente aquel que maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
+La siguiente función generará un gráfico que muestra los valores de Silhouette en función del número de clústeres. El número óptimo de clústeres es típicamente aquel que maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
 
 ```{r}
 #  Método Silhouette
@@ -219,9 +219,9 @@ set.seed(785248)
 factoextra::fviz_nbclust(resultado, kmeans, method = "silhouette")
 ```
 
-Este método nos reafirma que el número óptimo es 2 puesto que es el caso cuyos clusters maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
+Este método nos reafirma que el número óptimo es 2 puesto que es el caso cuyos clústeres maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
 
-**NOTA**: Ahora podríamos repetir el estudio anterior con el número de clusters igual a 2 e intentar analizar de nuevo los resultados. Destacar que, en última instancia, el número de clusters depende del interés del usuario que deberá fijarlo en función de sus objetivos o analizando que número es el óptimo.
+**NOTA**: Ahora podríamos repetir el estudio anterior con el número de clústeres igual a 2 e intentar analizar de nuevo los resultados. Destacar que, en última instancia, el número de clústeres depende del interés del usuario que deberá fijarlo en función de sus objetivos o analizando que número es el óptimo.
 
 # Conclusión
 

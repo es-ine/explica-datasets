@@ -1,5 +1,5 @@
 ---
-title: 'Cluster Jerárquico: ecv_cluster'
+title: 'Clúster Jerárquico: ecv_cluster'
 lang: es
 ---
 
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = "center", warning = FALSE, messag
 
 # Introducción
 
-En este notebook se expondrá como llevar a cabo un Análisis Cluster de tipo Jerárquico a partir de un conjunto de datos, explicando los fundamentos teóricos en el que se basa para agrupar los datos.
+En este notebook se expondrá como llevar a cabo un Análisis Clúster de tipo Jerárquico a partir de un conjunto de datos, explicando los fundamentos teóricos en el que se basa para agrupar los datos.
 
 ## dataset
 
@@ -28,18 +28,18 @@ En este cuaderno vamos a analizar el dataset llamado [*ecv_cluster.xlsx*](../../
 -   **tascar**: Tasa personas con carencia material severa.
 -   **tasvivtrab**: Tasa de hogares viviendo con baja intensidad en el trabajo (de 0 a 59 años).
 
-El objetivo de este estudio será aplicar un Análisis **Cluster** para hacer grupos de comunidades autónomas en función de las variables definidas arriba. Concretamente usaremos un cluster jerárquico.
+El objetivo de este estudio será aplicar un Análisis **Clúster** para hacer grupos de comunidades autónomas en función de las variables definidas arriba. Concretamente usaremos un clúster jerárquico.
 
 ## Descripción del trabajo a realizar
 
-Se pretende hacer un Análisis Cluster empleando el procedimiento Cluster Jerárquico de las **CCAA** en función a las variables **taspobex** y **tascar** .
+Se pretende hacer un Análisis Clúster empleando el procedimiento Clúster Jerárquico de las **CCAA** en función a las variables **taspobex** y **tascar** .
 
 -   Hacer un análisis exploratorio.Ver si hay NA's y si es necesario escalar los datos.
--   Variables sobre las que se buscan cluster (*taspobex*, *tascar*).
--   Estandarizar datos y probar cluster jerárquico con k=3.
+-   Variables sobre las que se buscan clúster (*taspobex*, *tascar*).
+-   Estandarizar datos y probar clúster jerárquico con k=3.
 -   Elegir Función Distancia y Método de Enlace (o comparar varias).
 -   Interpretar resultados.
--   Ver métodos Elbow y Silhouette si hay otro número óptimo de clusters y en ese caso repetir el estudio.
+-   Ver métodos Elbow y Silhouette si hay otro número óptimo de clústeres y en ese caso repetir el estudio.
 
 # Análisis Exploratorio (EDA)
 
@@ -126,30 +126,30 @@ grid.arrange(histogram, histogram2, boxplot, boxplot2, nrow = 2, ncol = 2, width
 ifelse(sum(is.na(datos)) == 0, print("There is no NA in the dataset."), print("There is some NA in the dataset."))
 ```
 
-# Clustering: Cluster Jerárquico
+# Clustering: Clúster Jerárquico
 
 ## Introducción
 
-El **Análisis Cluster** es una técnica de aprendizaje no supervisado que agrupa datos similares en conjuntos, llamados clusteres. El objetivo es dividir un conjunto de datos en grupos homogéneos, donde los miembros de cada grupo son más similares entre sí que con los miembros de otros grupos, según algún criterio de similitud predefinido.
+El **Análisis Clúster** es una técnica de aprendizaje no supervisado que agrupa datos similares en conjuntos, llamados clústeres. El objetivo es dividir un conjunto de datos en grupos homogéneos, donde los miembros de cada grupo son más similares entre sí que con los miembros de otros grupos, según algún criterio de similitud predefinido.
 
-Concretamente, el **Cluster Jerárquico** realiza estos grupos -o clusters- de manera jerárquica y ascendente, es decir que sucesivamente van fusionando grupos desde el elemento individual (mayor nivel de grupos, uno por individuo) hacia arriba.
+Concretamente, el **Clúster Jerárquico** realiza estos grupos -o clústeres- de manera jerárquica y ascendente, es decir que sucesivamente van fusionando grupos desde el elemento individual (mayor nivel de grupos, uno por individuo) hacia arriba.
 
-La **representación** de la jerarquía de cluster se representa por medio de un **dendograma**, en el que las sucesivas fusiones de las ramas a los distintos niveles nos informan de las sucesivas fusiones de los grupos en grupos de superior nivel (mayor tamaño, menor homogeneidad) sucesivamente:
+La **representación** de la jerarquía de clúster se representa por medio de un **dendograma**, en el que las sucesivas fusiones de las ramas a los distintos niveles nos informan de las sucesivas fusiones de los grupos en grupos de superior nivel (mayor tamaño, menor homogeneidad) sucesivamente:
 
-Los **pasos** concretos del Cluster Jerárquico son:
+Los **pasos** concretos del Clúster Jerárquico son:
 
 1.  **Matriz de distancia o similitud**: Se calcula una matriz que mide la distancia o similitud entre cada par de observaciones. Algunas de las medidas comunes son:
     -   **Euclidiana**: Mide la distancia más corta entre dos puntos en un espacio euclidiano. Es útil cuando las dimensiones tienen una **escala similar** y se desea tener en cuenta la magnitud absoluta de las diferencias.
     -   **Manhattan (o Cityblock)**: Calcula la suma de las diferencias absolutas entre las coordenadas de dos puntos. Es útil cuando las dimensiones **no están en la misma escala** y se quiere una medida robusta a los valores atípicos.
     -   **Gower**: métrica de distancia utilizada específicamente para conjuntos de **datos mixtos** que contienen variables numéricas y categóricas. Esta distancia tiene en cuenta diferentes tipos de variables al calcular la similitud entre dos observaciones. Se define como una combinación ponderada de las distancias entre variables.
-2.  **Fusión de clusteres**: En el enfoque aglomerativo, se fusionan gradualmente los clusteres más cercanos según la medida de distancia o similitud elegida. Esto nos lleva a la pregunta, ¿Cómo se calcula la distancia entre Clusters calcular la distancia o similitud entre clusteres en el proceso de agrupamiento jerárquico?. Existen varios **métodos de enlace**, destacando:
-    -   **Enlace Simple (Single Linkage)**: Calcula la distancia entre clusteres como la distancia más corta entre cualquier punto de un cluster y cualquier punto del otro cluster. Es sensible a la presencia de valores atípicos y al fenómeno del encadenamiento.
-    -   **Enlace Completo (Complete Linkage)**: Mide la distancia entre clusteres como la distancia más larga entre cualquier punto de un cluster y cualquier punto del otro cluster. Menos sensible a valores atípicos, pero puede generar clusteres de tamaño desigual.
-    -   **Enlace Promedio (Average Linkage)**: Calcula la distancia entre clusteres como la media de todas las distancias entre pares de puntos, uno de cada cluster. Más robusto frente a valores atípicos que el enlace simple y menos propenso al encadenamiento que el enlace completo.
-    -   **Enlace de Ward**: Minimiza la varianza dentro de los clusteres al fusionarlos. Intenta minimizar la suma de cuadrados dentro de cada cluster después de la fusión.
-3.  **Representación jerárquica**: Esto resulta en un dendrograma que muestra la jerarquía de agrupamiento, donde la altura en el dendrograma indica la distancia o disimilitud en la que se unen los clusteres.
+2.  **Fusión de clústeres**: En el enfoque aglomerativo, se fusionan gradualmente los clústeres más cercanos según la medida de distancia o similitud elegida. Esto nos lleva a la pregunta, ¿Cómo se calcula la distancia entre clústeres calcular la distancia o similitud entre clústeres en el proceso de agrupamiento jerárquico?. Existen varios **métodos de enlace**, destacando:
+    -   **Enlace Simple (Single Linkage)**: Calcula la distancia entre clústeres como la distancia más corta entre cualquier punto de un clúster y cualquier punto del otro clúster. Es sensible a la presencia de valores atípicos y al fenómeno del encadenamiento.
+    -   **Enlace Completo (Complete Linkage)**: Mide la distancia entre clústeres como la distancia más larga entre cualquier punto de un clúster y cualquier punto del otro clúster. Menos sensible a valores atípicos, pero puede generar clústeres de tamaño desigual.
+    -   **Enlace Promedio (Average Linkage)**: Calcula la distancia entre clústeres como la media de todas las distancias entre pares de puntos, uno de cada clúster. Más robusto frente a valores atípicos que el enlace simple y menos propenso al encadenamiento que el enlace completo.
+    -   **Enlace de Ward**: Minimiza la varianza dentro de los clústeres al fusionarlos. Intenta minimizar la suma de cuadrados dentro de cada clúster después de la fusión.
+3.  **Representación jerárquica**: Esto resulta en un dendrograma que muestra la jerarquía de agrupamiento, donde la altura en el dendrograma indica la distancia o disimilitud en la que se unen los clústeres.
 
-El clustering jerárquico permite explorar diferentes niveles de granularidad en los datos, pero puede ser computacionalmente costoso para grandes conjuntos de datos. Es **crucial** elegir la medida de similitud adecuada y el método de enlace (criterio para unir clusteres, single linkage, complete linkage, average linkage,...) para obtener resultados significativos.
+El clustering jerárquico permite explorar diferentes niveles de granularidad en los datos, pero puede ser computacionalmente costoso para grandes conjuntos de datos. Es **crucial** elegir la medida de similitud adecuada y el método de enlace (criterio para unir clústeres, single linkage, complete linkage, average linkage,...) para obtener resultados significativos.
 
 # Modelo
 
@@ -159,7 +159,7 @@ El clustering jerárquico permite explorar diferentes niveles de granularidad en
 
 -   El **escalado** es un paso esencial en la fase de preprocesamiento de datos para los algoritmos de agrupación. Garantiza que cada característica contribuya por igual al proceso de decisión del algoritmo, lo que lleva a resultados de agrupación más precisos e interpretables.
 
-Notar que la distancia más apropiada para usar es la Euclidea ya que ambas variables son del mismo tipo, tasas, y representan el mismo fenómeno demográfico y en la misma escala (una vez hayamos escalado). En cuanto al método para hacer los clusters, vamos a dejar el que viene por defecto, el complete. Este se basa en medir la distancia entre clusteres como la distancia más larga entre cualquier punto de un cluster y cualquier punto del otro cluster. Menos sensible a valores atípicos, pero puede generar clusteres de tamaño desigual.
+Notar que la distancia más apropiada para usar es la Euclidea ya que ambas variables son del mismo tipo, tasas, y representan el mismo fenómeno demográfico y en la misma escala (una vez hayamos escalado). En cuanto al método para hacer los clústeres, vamos a dejar el que viene por defecto, el complete. Este se basa en medir la distancia entre clústeres como la distancia más larga entre cualquier punto de un clúster y cualquier punto del otro clúster. Menos sensible a valores atípicos, pero puede generar clústeres de tamaño desigual.
 
 ```{r}
 # Preparación de los datos
@@ -183,7 +183,7 @@ En el dendrograma mostrado arriba, cada hoja corresponde a una observación. A m
 
 La altura de la fusión, representada en el eje vertical, indica la (des) similitud entre dos observaciones. Cuanto mayor sea la altura de la fusión, menos similares son las observaciones. Es importante destacar que las conclusiones sobre la proximidad de dos observaciones solo se pueden inferir en función de la altura donde las ramas que contienen esas dos observaciones se fusionan inicialmente. No podemos usar la proximidad de dos observaciones a lo largo del eje horizontal como criterio de su similitud.
 
-La altura del corte en el dendrograma controla el número de clusters obtenidos. **Cumple el mismo papel que 'k'** en la agrupación **k-means**. Para identificar subgrupos (es decir, clusters), podemos cortar el dendrograma con la función `cutree`. Suponer que queremos 3 clusteres:
+La altura del corte en el dendrograma controla el número de clústeres obtenidos. **Cumple el mismo papel que 'k'** en la agrupación **k-means**. Para identificar subgrupos (es decir, clústeres), podemos cortar el dendrograma con la función `cutree`. Suponer que queremos 3 clústeres:
 
 ```{r}
 # Cut tree into 3 groups
@@ -193,7 +193,7 @@ sub1 <- cutree(hc1, k = 3)
 table(sub1)
 ```
 
-Podemos añadir los clusters junto al dataframe con la función `dplyr::mutate`. El gráfico de puntos dibujando los clusters por colores vamos a dibujarlo para los valores originales sin escalar (ya que el escalado sólo lo hemos hecho a la hora de definir los clusters).
+Podemos añadir los clústeres junto al dataframe con la función `dplyr::mutate`. El gráfico de puntos dibujando los clústeres por colores vamos a dibujarlo para los valores originales sin escalar (ya que el escalado sólo lo hemos hecho a la hora de definir los clústeres).
 
 ```{r}
 # Mostrar Clusters
@@ -228,17 +228,17 @@ Se puede destacar lo siguiente:
 
 -   Por último, en **verde** encontramos el resto de CCAA que tienen valores más razonables para ambos indicadores.
 
-# Número Clusters Óptimo
+# Número Clústeres Óptimo
 
 Encontrar el número óptimo de clusters implica identificar la cantidad ideal de grupos en los que se pueden dividir los datos de manera significativa y coherente. Es crucial porque determina la calidad y utilidad de los resultados del análisis de agrupamiento.
 
-En este apartado revisaremos si el número de clusters que hemos seleccionado anteriormente (3) es el óptimo, y de lo contrario haremos de nuevo el análisis con el número que se obtenga.
+En este apartado revisaremos si el número de clústeres que hemos seleccionado anteriormente (3) es el óptimo, y de lo contrario haremos de nuevo el análisis con el número que se obtenga.
 
 ## Método Elbow
 
-Una de las formas comunes de determinar este número es a través del método del **codo** o **elbow** en inglés. Este método busca identificar el punto donde la adición de más clusters ya no proporciona un beneficio significativo en la varianza explicada o la cohesión dentro de los grupos.
+Una de las formas comunes de determinar este número es a través del método del **codo** o **elbow** en inglés. Este método busca identificar el punto donde la adición de más clústeres ya no proporciona un beneficio significativo en la varianza explicada o la cohesión dentro de los grupos.
 
-Al representar la variación explicada en función del número de clusters, observamos un **gráfico** que se asemeja a la **forma** de un codo. A medida que aumentamos el número de clusters, la varianza explicada tiende a disminuir. El punto en el que esta disminución se estabiliza o se aplana marca el número óptimo de clusters, indicando un equilibrio entre una mayor partición (más clusters) y una adecuada interpretabilidad de los grupos.
+Al representar la variación explicada en función del número de clústeres, observamos un **gráfico** que se asemeja a la **forma** de un codo. A medida que aumentamos el número de clústeres, la varianza explicada tiende a disminuir. El punto en el que esta disminución se estabiliza o se aplana marca el número óptimo de clústeres, indicando un equilibrio entre una mayor partición (más clústeres) y una adecuada interpretabilidad de los grupos.
 
 ```{r}
 #  Método Elbow
@@ -246,9 +246,9 @@ set.seed(785248)
 factoextra::fviz_nbclust(resultado, hcut, method = "wss")
 ```
 
-En el gráfico proporcionado, buscamos el "codo" del gráfico, que es el punto donde la suma total de cuadrados dentro de los clusters (total within-cluster sum of squares) deja de decrecer significativamente con la adición de más clusters.
+En el gráfico proporcionado, buscamos el "codo" del gráfico, que es el punto donde la suma total de cuadrados dentro de los clústeres (total within-cluster sum of squares) deja de decrecer significativamente con la adición de más clústeres.
 
-Observando el gráfico, el punto de inflexión más claro se encuentra en **k = 2**. Aquí es donde la disminución en la suma de cuadrados empieza a ser menos pronunciada en comparación con la disminución entre 1 y 2 clusters. De todos modos, también podría parecer razonable tomar el 3. Es por ello que vamos a usar algún método adicional.
+Observando el gráfico, el punto de inflexión más claro se encuentra en **k = 2**. Aquí es donde la disminución en la suma de cuadrados empieza a ser menos pronunciada en comparación con la disminución entre 1 y 2 clústeres. De todos modos, también podría parecer razonable tomar el 3. Es por ello que vamos a usar algún método adicional.
 
 ## Método Silhouette
 
@@ -256,11 +256,11 @@ El **método Silhouette** es una técnica utilizada para determinar la calidad d
 
 El proceso implica:
 
-1.  **Cálculo de la silueta individual**: Para cada punto de datos, se calcula la silueta, que es la diferencia entre la distancia media intra-cluster (distancia al resto de puntos en su mismo grupo) y la distancia media al cluster más cercano (distancia a los puntos del grupo más próximo, excluyendo el propio grupo).
+1.  **Cálculo de la silueta individual**: Para cada punto de datos, se calcula la silueta, que es la diferencia entre la distancia media intra-cluster (distancia al resto de puntos en su mismo grupo) y la distancia media al clúster más cercano (distancia a los puntos del grupo más próximo, excluyendo el propio grupo).
 
-2.  **Valor de la silueta global**: Se obtiene el promedio de las siluetas individuales de todos los puntos de datos en el conjunto. Contra más cercano a 1, mejor formado estará el cluster.
+2.  **Valor de la silueta global**: Se obtiene el promedio de las siluetas individuales de todos los puntos de datos en el conjunto. Contra más cercano a 1, mejor formado estará el clúster.
 
-La siguiente función generará un gráfico que muestra los valores de Silhouette en función del número de clusters. El número óptimo de clusters es típicamente aquel que maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
+La siguiente función generará un gráfico que muestra los valores de Silhouette en función del número de clústeres. El número óptimo de clústeres es típicamente aquel que maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster.
 
 ```{r}
 #  Método Silhouette
@@ -268,11 +268,11 @@ set.seed(785248)
 factoextra::fviz_nbclust(resultado, hcut, method = "silhouette")
 ```
 
-Este método nos reafirma que el número óptimo es 2 puesto que es el caso cuyos clusters maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster. No obstante, k=3 también presenta valores muy altos luego también podría ser una buena elección.
+Este método nos reafirma que el número óptimo es 2 puesto que es el caso cuyos clústeres maximiza el valor de Silhouette, representando una mejor cohesión intra-cluster y separación inter-cluster. No obstante, k=3 también presenta valores muy altos luego también podría ser una buena elección.
 
-**NOTA**: Ahora vamos repetir el estudio anterior con el número de clusters igual a 2 e intentar analizar de nuevo los resultados.
+**NOTA**: Ahora vamos repetir el estudio anterior con el número de clústeres igual a 2 e intentar analizar de nuevo los resultados.
 
-Vamos a utilizar en todos casos la distancia euclídea como ya se ha razonado antes y vamos a usar diferentes métodos de Fusión de Clusters para ver si obtenemos resultados significativos.
+Vamos a utilizar en todos casos la distancia euclídea como ya se ha razonado antes y vamos a usar diferentes métodos de Fusión de clústeres para ver si obtenemos resultados significativos.
 
 ```{r }
 # For Complete method
@@ -345,11 +345,11 @@ ggarrange(g1, g2, g3, g4 + rremove("x.text"),
 )
 ```
 
-Notar que en todos casos hemos obtenido (a excepción de con `simple`) distribuciones similares en los clusters, que viene siendo lo mismo que en el caso de k=3 clusters pero agrupando los dos primeros clusters que habíamos visto. Es por ello que los resultados parecen coherentes.
+Notar que en todos casos hemos obtenido (a excepción de con `simple`) distribuciones similares en los clústeres, que viene siendo lo mismo que en el caso de k=3 clústeres pero agrupando los dos primeros clústeres que habíamos visto. Es por ello que los resultados parecen coherentes.
 
 # Conclusión
 
-Aquí se han explicado los supuestos del cluster jerárquico con un dataset en el que se han creado clusters de CCAA según tasa de riesgo de pobreza y la carencia material. La evidencia nos ha mostrado que se tiende agrupar las comunidades con incidencias más altas por un lado y más bajas por otro.
+Aquí se han explicado los supuestos del cluster jerárquico con un dataset en el que se han creado clústeres de CCAA según tasa de riesgo de pobreza y la carencia material. La evidencia nos ha mostrado que se tiende agrupar las comunidades con incidencias más altas por un lado y más bajas por otro.
 
 # Bibliografía
 

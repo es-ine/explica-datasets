@@ -1,29 +1,29 @@
-- title: 'Cluster Jerárquico: desigualdad_CCAA'
-  tecnica: Cluster Jerárquico
+- title: 'Clúster Jerárquico: desigualdad_CCAA'
+  tecnica: Clúster Jerárquico
   href: files/desigualdad_ccaa.xlsx
   notebook: notebooks/Cluster Jerarquico/desigualdad_ccaa/desigualdad_ccaa.html
   categories:
-  - 'Técnica: Cluster Jerárquico'
+  - 'Técnica: Clúster Jerárquico'
   - 'Tema: Mercado laboral y salarios'
   description: Este dataset presenta un conjunto de datos sobre el salario medio anual
-    de hombres y mujeres en España, relativos a años 2017/18.
+    de hombres y mujeres en España, relativos a los años 2017 y 2018.
   operation:
-  - Encuesta Anual de Estructura Salarial (INE)
+  - Encuesta Anual de Estructura Salarial
   hoperation:
   - https://www.ine.es/dyngs/IOE/es/operacion.htm?id=1259931120231
   tema: Mercado laboral y salarios
   observaciones: 17
-- title: 'Cluster K-Means: desigualdad_CCAA'
-  tecnica: Cluster K-Means
+- title: 'Clúster K-Means: desigualdad_CCAA'
+  tecnica: Clúster K-Means
   href: files/desigualdad_ccaa.xlsx
   notebook: notebooks/Cluster K-Means/desigualdad_ccaa/desigualdad_ccaa.html
   categories:
-  - 'Técnica: Cluster K-Means'
+  - 'Técnica: Clúster K-Means'
   - 'Tema: Mercado laboral y salarios'
   description: Este dataset presenta un conjunto de datos sobre el salario medio anual
-    de hombres y mujeres en España, relativos a años 2017/18.
+    de hombres y mujeres en España, relativos a los años 2017 y 2018.
   operation:
-  - Encuesta Anual de Estructura Salarial (INE)
+  - Encuesta Anual de Estructura Salarial
 
   hoperation:
   - https://www.ine.es/dyngs/IOE/es/operacion.htm?id=1259931120231
@@ -38,7 +38,7 @@
   - "Tema: Nivel - calidad y condiciones de vida"
   description: Microdatos extraidos de la  Encuesta de Condiciones de Vida (ECV) del
     año 2019. El objetivo es  estimar si la calidad de vida de una persona ha mejorado
-    respecto a su infancia , de acuerdo con su año de nacimiento y su nivel de estudios.
+    respecto a su infancia, de acuerdo con su año de nacimiento y su nivel de estudios.
   operation:
   - Encuesta de Condiciones de Vida (ECV)
   hoperation:
@@ -46,31 +46,31 @@
   tema: Nivel, calidad y condiciones de vida
   observaciones: 17463
   cleaning: notebooks/Logistic Regression/ECV/Dataset_cleaning.html
-- title: 'Cluster Jerárquico: ecv_cluster'
-  tecnica: Cluster Jerárquico
+- title: 'Clúster Jerárquico: ecv_cluster'
+  tecnica: Clúster Jerárquico
   href: files/ecv_cluster.xlsx
   notebook: notebooks/Cluster Jerarquico/ecv_cluster/ecv_cluster.html
   categories:
-  - 'Técnica: Cluster Jerárquico'
+  - 'Técnica: Clúster Jerárquico'
   - 'Tema: Nivel - calidad y condiciones de vida'
   description: Datos por Comunidades Autónomas sobre la tasa de riesgo de pobreza,
-    la carencia material o la situación laboral que encontramos dentro de la Encuesta
-    de Condiciones de Vida (ECV). Datos correspondientes al año 2021.
-  operation: [Encuesta de Condiciones de Vida (ECV) (INE)]
+    la carencia material o la situación laboral que encontramos en los datos de la
+    Encuesta de Condiciones de Vida (ECV). Datos correspondientes al año 2021.
+  operation: [Encuesta de Condiciones de Vida (ECV)]
   hoperation: [https://www.ine.es/dyngs/IOE/es/operacion.htm?id=1259931119237]
   tema: Nivel, calidad y condiciones de vida
   observaciones: 19
-- title: 'Cluster K-Means: ecv_cluster'
-  tecnica: Cluster K-Means
+- title: 'Clúster K-Means: ecv_cluster'
+  tecnica: Clúster K-Means
   href: files/ecv_cluster.xlsx
   notebook: notebooks/Cluster K-Means/ecv_cluster/ecv_cluster.html
   categories:
-  - 'Técnica: Cluster K-Means'
+  - 'Técnica: Clúster K-Means'
   - 'Tema: Nivel - calidad y condiciones de vida'
   description: Datos por Comunidades Autónomas sobre la tasa de riesgo de pobreza,
-    la carencia material o la situación laboral que encontramos dentro de la Encuesta
-    de Condiciones de Vida (ECV). Datos correspondientes al año 2021.
-  operation: [Encuesta de Condiciones de Vida (ECV) (INE)]
+    la carencia material o la situación laboral que encontramos en los datos de la
+    Encuesta de Condiciones de Vida (ECV). Datos correspondientes al año 2021.
+  operation: [Encuesta de Condiciones de Vida (ECV)]
   hoperation: [https://www.ine.es/dyngs/IOE/es/operacion.htm?id=1259931119237]
   tema: Nivel, calidad y condiciones de vida
   observaciones: 19
@@ -81,11 +81,11 @@
   categories:
   - 'Técnica: Reducción Dimensionalidad'
   - 'Tema: Nivel - calidad y condiciones de vida'
-  description: Este dataset presenta un conjunto de microdatos  relativos a la ECV
-    donde se puntua el nivel de satisfacción en determinados ámbitos de la vida (laboral,
-    económico, relaciones personales..). El objetivo es llevar a cabo un análisis
-    factorial
-  operation: [Encuesta de Condiciones de Vida (ECV) (INE)]
+  description: Este dataset presenta un conjunto de microdatos relativos a la
+    Encuesta de Condiciones de Vida (ECV) donde se puntúaa el nivel de satisfacción
+    en determinados ámbitos de la vida (laboral, económico, relaciones 
+    personales..). El objetivo es llevar a cabo un análisis factorial.
+  operation: [Encuesta de Condiciones de Vida (ECV)]
   hoperation: [https://www.ine.es/dyngs/IOE/es/operacion.htm?id=1259931119237]
   tema: Nivel, calidad y condiciones de vida
   observaciones: 26883
@@ -97,7 +97,7 @@
   categories:
   - 'Técnica: Reducción Dimensionalidad'
   - 'Tema: Estadística Experimental'
-  description: Datos por Comunidades Autónomas de las nueve dimensiones relativos
+  description: Datos por Comunidades Autónomas de las nueve dimensiones relativas
     a la calidad de vida que componen el Índice Multidimensional de Calidad de Vida
     (IMCV), una estadística con carácter experimental. Datos correspondientes al año
     2020.
@@ -131,7 +131,7 @@
   categories:
   - 'Técnica: Series Temporales'
   - 'Tema: Precios'
-  description: Datos relativos a la serie del IPC mensual en españa desde 2002 hasta
+  description: Datos relativos a la serie del IPC mensual en España desde 2002 hasta
     2022.
   operation: [Índice de Precios de Consumo (IPC)]
   hoperation: [https://www.ine.es/dyngs/IOE/es/operacion.htm?numinv=30138]
@@ -144,7 +144,7 @@
   categories:
   - 'Técnica: Series Temporales'
   - 'Tema: Precios'
-  description: Datos relativos a la serie del IPC mensual en españa desde 2002 hasta
+  description: Datos relativos a la serie del IPC mensual en España desde 2002 hasta
     2022.
   operation: [Índice de Precios de Consumo (IPC)]
   hoperation: [https://www.ine.es/dyngs/IOE/es/operacion.htm?numinv=30138]
@@ -157,9 +157,9 @@
   categories:
   - 'Técnica: Análisis Discriminante'
   - 'Tema: Mercado laboral y salarios'
-  description: Microdatos relativos a la encuesta de estructura salarial de las personas
-    en 2018. Salario bruto, Edad y Antigüedad en el trabajo y días de vacaciones al
-    año del encuestado con el fin de clasificar los estudios (o bien tienen pocos
+  description: Microdatos relativos a la Encuesta de Estructura Salarial de
+    2018. Salario bruto, edad y antigüedad en el trabajo y días de vacaciones al
+    año del encuestado, con el fin de clasificar los estudios (o bien tienen pocos
     estudios o bien muchos) de una persona en función de las anteriores variables.
   operation: [Encuesta Anual de Estructura Salarial]
   hoperation: [https://www.ine.es/dyngs/IOE/es/operacion.htm?id=1259931120231]
@@ -174,8 +174,8 @@
   - 'Técnica: Regresión Logística'
   - 'Tema: Mercado laboral y salarios'
   description: Microdatos relativos a la encuesta de estructura salarial de las personas
-    en 2018. Salario bruto, Edad y Antigüedad en el trabajo y días de vacaciones al
-    año del encuestado con el fin de clasificar los estudios (o bien tienen pocos
+    en 2018. Salario bruto, edad y antigüedad en el trabajo y días de vacaciones al
+    año del encuestado, con el fin de clasificar los estudios (o bien tienen pocos
     estudios o bien muchos) de una persona en función de las anteriores variables.
   operation: [Encuesta Anual de Estructura Salarial]
   hoperation: [https://www.ine.es/dyngs/IOE/es/operacion.htm?id=1259931120231]
@@ -189,8 +189,8 @@
   categories:
   - 'Técnica: Series Temporales'
   - 'Tema: Demografía y población'
-  description: Datos relativos a la población de la CCAA de Madrid desde 1971 hasta
-    2022 desagregados por sexo y con cáracter bianual.
+  description: Datos relativos a la población de la Comunidad de Madrid desde 1971 hasta
+    2022 desagregados por sexo y con carácter bianual.
   operation: [Estadística Continua de Población (ECP)]
   hoperation: [https://www.ine.es/dyngs/IOE/es/fichaProg.htm?cid=1259946013552]
   tema: Demografía y población
@@ -211,11 +211,11 @@
     \nOrientado a escalamiento multidimensional, técnicas de clusterización y análisis
     de componentes principales."
   operation:
-  - Censos de Población y Viviendas 2021  INE
-  - Indicadores Demográficos Básicos
+  - Censos de Población y Viviendas 2021
+  - Indicadores Demográficos Básicos (IDB)
   - Tablas de mortalidad
-  - Encuesta de Población Activa (EPA).
-  - Estadística de Transmisiones de Derechos de la Propiedad
+  - Encuesta de Población Activa (EPA)
+  - Estadística de Transmisiones de Derechos de la Propiedad ()ETDP)
   - Estadística de Hipotecas
   - Índice de Precios de la Vivienda (IPV)
   hoperation:
@@ -236,8 +236,8 @@
   categories:
   - 'Técnica: Series Temporales'
   - 'Tema: Demografía y población'
-  description: Datos relativos a la población de la CCAA Navarra desde 1971 hasta
-    2021 desagregados por sexo y con cáracter bianual.
+  description: Datos relativos a la población de la Comunidad Foral de Navarra
+    desde 1971 hasta 2021 desagregados por sexo y con carácter bianual.
   operation: [Estadística Continua de Población (ECP)]
   hoperation: [https://www.ine.es/dyngs/IOE/es/fichaProg.htm?cid=1259946013552]
   tema: Demografía y población
@@ -249,11 +249,11 @@
   categories:
   - 'Técnica: Regresión Logística'
   - 'Tema: Demografía y población'
-  description: Datos relativos a partos en 2022 en la Comunidad Autónoma de Navarra.
-    El objetivo es clasificar los partos en si hubo o no una cesárea en función de
-    la edad de la madre, las complicaciones en el parto y las semanas de gestación.
+  description: Datos relativos a partos en 2022 en la Comunidad Foral de Navarra.
+    El objetivo es clasificar los partos en función de si hubo o no una 
+    cesárea, en relación con la edad de la madre, las complicaciones en el parto y las semanas de gestación.
   operation:
-  - Estadística de nacimientos. Movimiento natural de la población
+  - 'MNP: Estadística de nacimientos'
   hoperation:
   - https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736177007&menu=ultiDatos&idp=1254735573002
   tema: Demografía y población
@@ -270,7 +270,7 @@
     PISA  que trata de medir la existencia de variables socioeconómicas, metacognitivas,
     motivacionales e, incluso, emocionales, que pueden tener impacto sobre el rendimiento
     académico. El objetivo es llevar a cabo un análisis factorial.
-  operation: [Ministerio Educación]
+  operation: [Estudio PISA 2018 (Ministerio de Educación, Formación Profesional y Deportes)]
   hoperation: [https://www.educacionyfp.gob.es/inee/evaluaciones-internacionales/pisa.html]
   tema: Educación y formación
   observaciones: 35943
@@ -292,16 +292,16 @@
     puede ser útil para aplicar técnicas de reducir la dimensionalidad y entender
     las relaciones entre las diferentes variables."
   operation:
-  - Encuesta de Población Activa
-  - Estadística sobre Ejecuciones Hipotecarias. (INE)
-  - Explotación Estadística del Directorio Central de Empresas
-  - Contabilidad Regional de España
+  - Encuesta de Población Activa (EPA)
+  - Estadística sobre Ejecuciones Hipotecarias
+  - Explotación Estadística del Directorio Central de Empresas (DIRCE)
+  - Contabilidad Regional de España (CRE)
   - Estadística de migraciones
   - Estadística del Padrón Continuo
   - Censo Agrario
-  - Estadística de prestaciones por desempleo. (Ministerio de Trabajo y Economía Social)
-  - Estadística de apoyo a la creación de empleo.(Ministerio de Trabajo y Economía
-    Social)
+  - Estadística de prestaciones por desempleo del Ministerio de Trabajo y Economía Social
+  - Estadística de apoyo a la creación de empleo del Ministerio de Trabajo y Economía
+    Social
   hoperation:
   - https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176918&menu=resultados&secc=1254736195128&idp=1254735976595
   - https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176993&menu=resultados&idp=1254735576757
@@ -322,8 +322,8 @@
   categories:
   - 'Técnica: Análisis Discriminante'
   - 'Tema: Salud'
-  description: Microdatos relativos a la encuesta de Salud a personas en 2017. Altura,
-    Peso y Edad del encuestado con el fin de clasificar el sexo de una persona en
+  description: Microdatos relativos a la Encuesta Nacional de Salud de 2017. Altura,
+    peso y edad del encuestado con el fin de clasificar el sexo de una persona en
     función de las anteriores variables.
   operation: [Encuesta Nacional de Salud (ENSE)]
   hoperation: [https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176783&menu=resultados&idp=1254735573175]
@@ -353,7 +353,7 @@
   - 'Técnica: Regresión Lineal'
   - 'Tema: Salud'
   description: Microdatos relativos a la encuesta de Salud a personas en 2017. Altura,
-    Peso, Edad Sexo e IMC del encuestado con el fin de hacer una regresión del Peso
+    peso, edad, sexo e IMC del encuestado con el fin de hacer una regresión del peso
     en función del resto de variables y explicar por qué es interesante este estudio.
   operation: [Encuesta Nacional de Salud (ENSE)]
   hoperation: [https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176783&menu=resultados&idp=1254735573175]
@@ -370,10 +370,10 @@
   description: Datos para las Comunidades Autónomas, abordando sobre aspectos demográficos
     y de salud. Contiene variables como la tasa de natalidad y mortalidad, el índice
     de envejecimiento, tasas de profesionales de la salud (médicos y enfermeros) por
-    cada 100,000 habitantes, el porcentaje de inaccesibilidad a medicamentos recetados
+    cada 100.000 habitantes, el porcentaje de inaccesibilidad a medicamentos recetados
     por razones económicas y la tasa media de morbilidad hospitalaria debido a enfermedades.
   operation:
-  - Indicadores demográficos básicos
+  - Indicadores demográficos básicos (IDB)
   - Estadística de profesionales sanitarios colegiados
   - Encuesta europea de salud en España
   hoperation:
@@ -396,17 +396,16 @@
   - 'Cifras Oficiales de Población de los Municipios Españoles: Revisión del Padrón
     Municipal'
   - Encuesta de Población Activa (EPA)
-  - Índice de Precios de Consumo
-  - 'Estadística de Condenados: Menores (INE)'
+  - Índice de Precios de Consumo (IPC)
+  - 'Estadística de Condenados: Menores'
   - Contabilidad Regional de España
   - Estadísticas sobre Recogida y Tratamiento de Residuos
   - Estadística de Sociedades Mercantiles
   - Estadística de Defunciones según la Causa de Muerte
   - Estadística de Movimientos Turísticos en Frontera (FRONTUR)
   - Estadística de Violencia Doméstica y Violencia de Género
-  - Estadística de Defunciones según la Causa de Muerte
   - Estadística del Procedimiento Concursal
-  - (Ficha plan) Estadística sobre Actividades en ID
+  - Estadística sobre Actividades en I+D
   - Encuesta de Presupuestos Familiares (EPF)
   - Estadísticas sobre las Actividades de Protección Medioambiental
   hoperation:
@@ -427,47 +426,47 @@
   - https://www.ine.es/dyngs/IOE/es/fichaPlan.htm?cid=1259946127294
   tema: Salud
   observaciones: 17
-- title: 'Cluster Jerárquico: VarCovid'
-  tecnica: Cluster Jerárquico
+- title: 'Clúster Jerárquico: VarCovid'
+  tecnica: Clúster Jerárquico
   href: files/VarCovid.xlsx
   notebook: notebooks/Cluster Jerarquico/VarCovid/VarCovid.html
   categories:
-  - 'Técnica: Cluster Jerárquico'
+  - 'Técnica: Clúster Jerárquico'
   - 'Tema: Salud'
   description: Este dataset presenta un conjunto de datos de las Tasas de variación
     de fallecidos en 2020 respecto al año anterior. Destacar que que 2020 fue el año
-    del COVID y 1Ola, 2Ola, 3Ola corresponden a las semanas en las que se dieron dichas
+    del COVID y "1Ola", "2Ola", "3Ola" corresponden a las semanas en las que se dieron dichas
     olas.
   operation: [Estimación de Defunciones Semanales]
   hoperation: [https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736177074&menu=ultiDatos&idp=1254735573175]
   tema: Salud
   observaciones: 20
-- title: 'Cluster K-Means: VarCovid'
-  tecnica: Cluster K-Means
+- title: 'Clúster K-Means: VarCovid'
+  tecnica: Clúster K-Means
   href: files/VarCovid.xlsx
   notebook: notebooks/Cluster K-Means/VarCovid/VarCovid.html
   categories:
-  - 'Técnica: Cluster K-Means'
+  - 'Técnica: Clúster K-Means'
   - 'Tema: Salud'
   description: Este dataset presenta un conjunto de datos de las Tasas de variación
     de fallecidos en 2020 respecto al año anterior. Destacar que que 2020 fue el año
-    del COVID y 1Ola, 2Ola, 3Ola corresponden a las semanas en las que se dieron dichas
+    del COVID y "1Ola", "2Ola", "3Ola" corresponden a las semanas en las que se dieron dichas
     olas.
   operation: [Estimación de Defunciones Semanales]
   hoperation: [https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736177074&menu=ultiDatos&idp=1254735573175]
   tema: Salud
   observaciones: 20
-- title: 'Cluster Jerárquico: VarCovid_provincias'
-  tecnica: Cluster Jerárquico
+- title: 'Clúster Jerárquico: VarCovid_provincias'
+  tecnica: Clúster Jerárquico
   href: files/VarCovid_provincias.xlsx
   notebook: notebooks/Cluster Jerarquico/VarCovid_provincias/VarCovid_provincias.html
   categories:
-  - 'Técnica: Cluster Jerárquico'
+  - 'Técnica: Clúster Jerárquico'
   - 'Tema: Salud'
   description: Datos por provincias del exceso de mortalidad durante las cinco primeras
     olas de COVID-19 en comparación con las personas fallecidas en el mismo periodo
-    de los años 2017, 2018 y 2019, años previos a la pandemia, una estadística con
-    carácter experimental.
+    de los años 2017, 2018 y 2019, previos a la pandemia. Los datos provienen de 
+    una estadística experimental.
   operation: [Estimación de Defunciones Semanales]
   hoperation: [https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736177074&menu=ultiDatos&idp=1254735573175]
   tema: Salud
@@ -479,8 +478,8 @@
   categories:
   - 'Técnica: Series Temporales'
   - 'Tema: Demografía y población'
-  description: Datos relativos a la población de la CCAA de Madrid desde 1971 hasta
-    2022 desagregados por sexo y con cáracter bianual.
+  description: Datos relativos a la población de la Comunidad de Madrid desde 1971 hasta
+    2022 desagregados por sexo y con carácter bianual.
   operation: [Estadística Continua de Población (ECP)]
   hoperation: [https://www.ine.es/dyngs/IOE/es/fichaProg.htm?cid=1259946013552]
   tema: Demografía y población
@@ -533,12 +532,12 @@
   hoperation: [https://www.ine.es/dyngs/IOE/es/operacion.htm?numinv=30308]
   tema: Mercado laboral y salarios
   observaciones: 46
-- title: 'Cluster K-Means: salario_kmeans'
-  tecnica: Cluster K-Means
+- title: 'Clúster K-Means: salario_kmeans'
+  tecnica: Clúster K-Means
   href: files/salario_kmeans.xlsx
   notebook: notebooks/Cluster K-Means/salario_kmeans/salario_kmeans.html
   categories:
-  - 'Técnica: Cluster K-Means'
+  - 'Técnica: Clúster K-Means'
   - 'Tema: Mercado laboral y salarios'
   - 'Tema: Demografía y población'
   description: Este dataset presenta un conjunto de datos sobre el salario medio de
